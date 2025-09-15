@@ -8,14 +8,28 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
 
+
+
+// add person function:
   const addPerson = (event) => {
   event.preventDefault()  // stop the page from reloading
+
+
+  //- DUPLICATE CHECK:
+  if (persons.some(person => person.name.toLowerCase()=== newName.toLowerCase())) {
+    alert(`${newName} is already added to the phonebook!`)
+    return
+  }
+
 
   const personObject = { name: newName }
 
   setPersons(persons.concat(personObject)) // update the list
   setNewName('') // clear the input after adding
 }
+
+
+
 
 return (
     <div>
