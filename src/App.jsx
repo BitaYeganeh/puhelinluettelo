@@ -1,10 +1,9 @@
-
-
 import { useState } from 'react'
 import './App.css'
 import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
+import Notification from './components/Notification.jsx'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -14,55 +13,58 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
   ]) 
 
-  //adding states:
+  // states
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [notification, setNotification] = useState({ message: null, type: '' })
 
-
-// add person function:
+  // add person function
   const addPerson = (event) => {
-  event.preventDefault()  // stop the page from reloading
+    event.preventDefault()
 
-
-  // duplicate check (case-insensitive)
+    // duplicate check
     if (persons.some(p => p.name.toLowerCase() === newName.trim().toLowerCase())) {
-      alert(`${newName} is already added to the phonebook!`)
+      setNotification({ message: `${newName} is already added to the Phonebook`, type: 'error' })
+      setTimeout(() => {
+        setNotification({ message: null, type: '' })
+      }, 3000)
       return
     }
 
-
-      const personObject = {
-      id: Date.now(), // simple unique id
+    const personObject = {
+      id: Date.now(),
       name: newName.trim(),
       number: newNumber.trim()
     }
 
+    setPersons(persons.concat(personObject))
+    setNewName('')
+    setNewNumber('')
 
-  setPersons(persons.concat(personObject)) // update the list
-  setNewName('') // clear the input after adding
-  setNewNumber('')// clear the number input after adding
-}
+    setNotification({ message: `Added ${newName}`, type: 'success' })
+    setTimeout(() => {
+      setNotification({ message: null, type: '' })
+    }, 3000)
+  }
 
- // create the filtered list once and pass it to <Persons />
+  // filter list
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-
-
-return (
+  return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification.message} type={notification.type} />
 
-      {/* Search field */}
-       <Filter
+      <Filter
         searchTerm={searchTerm}
         handleSearchChange={(e) => setSearchTerm(e.target.value)}
       />
-        <hr />
+      <hr />
 
-           <h2>Add:</h2>
+      <h2>Add:</h2>
       <PersonForm
         addPerson={addPerson}
         newName={newName}
@@ -72,9 +74,8 @@ return (
       />
       <hr />
 
-        <h2>Numbers</h2>
+      <h2>Numbers</h2>
       <Persons persons={personsToShow} />
-    
     </div>
   )
 }
