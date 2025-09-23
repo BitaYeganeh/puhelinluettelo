@@ -1,0 +1,13 @@
+import axios from 'axios'
+
+const baseUrl = 'http://localhost:3001/persons'
+
+//fetch all persons
+
+const getAll = () => axios.get(baseUrl).
+    then(res => res.data)
+
+//Add a new person
+const create = (newPerson) => axios.post(baseUrl, newPerson).then(res => res.data)
+
+export default {getAll, create}
