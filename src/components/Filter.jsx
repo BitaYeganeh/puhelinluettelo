@@ -5,7 +5,7 @@
 const Filter = ({ searchTerm, handleSearchChange }) => {
   return (
     <div>
-      Search: <input value={searchTerm} onChange={handleSearchChange} />
+      Filter shown with: <input value={searchTerm} onChange={handleSearchChange} />
     </div>
   )
 }
