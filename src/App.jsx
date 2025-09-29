@@ -14,6 +14,13 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [notification, setNotification] = useState({ message: null, type: '' })
  
+      //create helper for Notifications
+    const showNotification = (message, type='success', duration=3000)=>{
+      setNotification({message, type})
+      setTimeout(()=> setNotification({message:null, type:''}), duration)
+
+    }
+
   // Load initial persons from backend
   useEffect(() => {
   PersonServices.getAll().then(initialPersons => setPersons(initialPersons))
@@ -42,13 +49,11 @@ const App = () => {
 
           setNewName('')
           setNewNumber('')
-          setNotification({ message: `Updated ${returnedPerson.name}`, type: 'success' })
-          setTimeout(() => setNotification({ message: null, type: '' }), 3000)
+          showNotification(`Updated ${returnedPerson.name}`, 'success')
         })
 
         .catch(() => {
-          setNotification({ message: `Information of ${existingPerson.name} has already been removed from the server`, type: 'error' })
-          setTimeout(() => setNotification({ message: null, type: '' }), 3000)
+          showNotification(`Information of ${existingPerson.name} has already been removed from the server`, 'error' )
           setPersons(persons.filter(p => p.id !== existingPerson.id))
         })
         
@@ -56,6 +61,7 @@ const App = () => {
       }
       return
     }
+
 
   // create personObject
     const personObject = {
@@ -68,8 +74,7 @@ const App = () => {
   setPersons(persons.concat(returnedPerson))  // add backend response to state
   setNewName('')
   setNewNumber('')
-  setNotification({ message: `Added ${returnedPerson.name}`, type: 'success' })
-  setTimeout(() => setNotification({ message: null, type: '' }), 3000)
+  showNotification(`Added ${returnedPerson.name}`, 'success')
 })
   }
 
@@ -85,12 +90,10 @@ const App = () => {
         .then(()=> {
           setPersons(persons.filter(p => p.id !== id))
         //Add success and error messages:
-        setNotification({message: `Deleted ${name}`, type:'success'})
-        setTimeout(() => setNotification({ message: null, type:'' }), 3000)
+        showNotification(`Deleted ${name}`, 'success')
         })
         .catch(() => {
-          setNotification({ message: `Information of ${name} has deleted from the server`, type: 'error'})
-          setTimeout (() => setNotification({ message: null, type: '' }), 3000)      
+          showNotification( `Information of ${name} has already been removed from the server`, 'error')
         })
       }
     
