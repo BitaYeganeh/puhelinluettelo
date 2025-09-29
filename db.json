@@ -1,24 +1,9 @@
 {
   "persons": [
     {
-      "name": "Ada Lovelace",
-      "number": "5679876",
-      "id": "2"
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": "3"
-    },
-    {
       "name": "Mary Poppendieck",
       "number": "67898765",
       "id": "4"
-    },
-    {
-      "id": "f055",
-      "name": "Bita",
-      "number": "Yeganeh"
     },
     {
       "id": "1ff2",
@@ -26,24 +11,14 @@
       "number": "39445323544"
     },
     {
-      "id": "a3ec",
-      "name": "h",
-      "number": "908"
-    },
-    {
       "id": "9970",
       "name": "er",
       "number": "543"
     },
     {
-      "id": "251e",
-      "name": "ed",
-      "number": ""
-    },
-    {
-      "id": "3e5a",
-      "name": "rtyu",
-      "number": ""
+      "id": "8094",
+      "name": "alice",
+      "number": "5678"
     }
   ]
 }

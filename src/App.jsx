@@ -14,7 +14,8 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [notification, setNotification] = useState({ message: null, type: '' })
  
-      //create helper for Notifications
+      //HELPER FOR NOTIFICATIONS
+
     const showNotification = (message, type='success', duration=3000)=>{
       setNotification({message, type})
       setTimeout(()=> setNotification({message:null, type:''}), duration)
@@ -26,7 +27,7 @@ const App = () => {
   PersonServices.getAll().then(initialPersons => setPersons(initialPersons))
        }, [])
 
-  // add person function
+  // ADD OR UPDATE PERSON
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -52,36 +53,48 @@ const App = () => {
           showNotification(`Updated ${returnedPerson.name}`, 'success')
         })
 
-        .catch(() => {
-          showNotification(`Information of ${existingPerson.name} has already been removed from the server`, 'error' )
-          setPersons(persons.filter(p => p.id !== existingPerson.id))
-        })
-        
+
+            .catch(() => {
+            showNotification(
+              `Failed to update ${existingPerson.name}. They may have been removed from the server.`,
+              'error'
+            )
+    // Remove the person from state so your UI is up to date
+      setPersons(persons.filter(p => p.id !== existingPerson.id))
+})
+  
 
       }
       return
     }
 
 
-  // create personObject
+  // ADD A NEW PERSON
+
     const personObject = {
       name: newName.trim(),
       number: newNumber.trim()
         }
   // Send to backend and update state
 
-  PersonServices.create(personObject).then(returnedPerson => {
+  PersonServices.create(personObject)
+  .then(returnedPerson => {
   setPersons(persons.concat(returnedPerson))  // add backend response to state
   setNewName('')
   setNewNumber('')
   showNotification(`Added ${returnedPerson.name}`, 'success')
 })
+      .catch(() => {
+        showNotification(`Failed to add ${newName}.`, 'error')
+      })
   }
 
   // filter list
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  //DELETE A PERSON
   const handleDelete = (id, name) => {
     if(
       window.confirm(`Delete ${name}?`)) {
@@ -92,11 +105,14 @@ const App = () => {
         //Add success and error messages:
         showNotification(`Deleted ${name}`, 'success')
         })
-        .catch(() => {
-          showNotification( `Information of ${name} has already been removed from the server`, 'error')
+       .catch(() => {
+          showNotification(
+            `Failed to delete ${name}. They may have already been removed from the server.`,
+            'error'
+          )
+          setPersons(persons.filter(p => p.id !== id)) // keep UI consistent
         })
-      }
-    
+    }
   }
 
   return (
